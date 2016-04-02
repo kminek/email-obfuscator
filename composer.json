@@ -1,0 +1,14 @@
+{
+    "name": "kminek/email-obfuscator",
+    "description": "Effective email obfuscation in PHP",
+    "homepage": "https://github.com/kminek/email-obfuscator",
+    "keywords": ["email", "obfuscation"],
+    "autoload": {
+        "psr-4": {
+            "Kminek\\": "src"
+        },
+        "files": [
+            "src/helper.php"
+        ]
+    }
+}
