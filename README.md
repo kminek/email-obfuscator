@@ -13,10 +13,10 @@ variable names).
 
 ```php
 // helper function
-obfuscate_email('contact@sample.com');
-obfuscate_email('contact@sample.com', 'Contact us');
+echo obfuscate_email('contact@sample.com');
+echo obfuscate_email('contact@sample.com', 'Contact us');
 
 // class
-\Kminek\EmailObfuscator::obfuscate('contact@sample.com');
-\Kminek\EmailObfuscator::obfuscate('contact@sample.com', 'Contact us');
+echo \Kminek\EmailObfuscator::obfuscate('contact@sample.com');
+echo \Kminek\EmailObfuscator::obfuscate('contact@sample.com', 'Contact us');
 ```
