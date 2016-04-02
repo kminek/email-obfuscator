@@ -7,8 +7,20 @@ namespace Kminek;
  */
 class EmailObfuscator
 {
-    public static function obfuscate($email)
+    /**
+     * Obfuscate email
+     *
+     * @param  string $email
+     * @param  null|string $text
+     * @param  array $options
+     * @return string
+     */
+    public static function obfuscate($email, $text = null, $options = [])
     {
+        $defaults = [
+            'noscript' => 'Enable JavaScript to see this email address',
+        ];
+        $options = array_merge($defaults, $options);
         $email = strtolower($email);
         $coded = '';
         $unmixedkey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@';
@@ -35,14 +47,46 @@ class EmailObfuscator
                 $coded .= $cipher[$chr];
             }
         }
+        $vars = [];
+        foreach (['coded', 'key', 'link', 'text'] as $var) {
+            do {
+                $rnd = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 10);
+            } while (in_array($rnd, array_values($vars)));
+            $vars[$var] = $rnd;
+        }
+        $text = ($text == null) ? "var {$vars['text']} = {$vars['link']}" : "var {$vars['text']} = '{$text}'";
+        $attrs = '';
+        foreach ($options as $k => $v) {
+            if (in_array($k, array_keys($defaults))) {
+                continue;
+            }
+            $attrs .= " {$k}=\"{$v}\"";
+        }
         $javascript = <<<JAVASCRIPT
 <script type="text/javascript" language="javascript">
 <!--
+// Email obfuscator script 2.1 by Tim Williams, University of Arizona
+// Random encryption key feature by Andrew Moulden, Site Engineering Ltd
+// This code is freeware provided these four comment lines remain intact
+// A wizard to generate this code is at http://www.jottings.com/obfuscator/
 (function(){
-    document.write('test!');
+    var {$vars['coded']} = '{$coded}';
+    var {$vars['key']} = '{$cipher}';
+    var {$vars['link']} = '';
+    for (var i=0; i < {$vars['coded']}.length; i++) {
+        if ({$vars['key']}.indexOf({$vars['coded']}.charAt(i)) == -1) {
+            var ltr = {$vars['coded']}.charAt(i);
+            {$vars['link']} += (ltr);
+        } else {
+            var ltr = ({$vars['key']}.indexOf({$vars['coded']}.charAt(i)) - {$vars['coded']}.length + {$vars['key']}.length) % {$vars['key']}.length;
+            {$vars['link']} += ({$vars['key']}.charAt(ltr));
+        }
+    }
+    {$text};
+    document.write('<a href="mailto:' + {$vars['link']} + '"{$attrs}>' + {$vars['text']} + '</a>');
 })();
 //-->
-</script>
+</script><noscript>{$options['noscript']}</noscript>
 JAVASCRIPT;
         return $javascript;
     }

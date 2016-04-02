@@ -12,7 +12,16 @@ use Kminek\EmailObfuscator;
 </head>
 <body>
     <h1>Email Obfuscator</h1>
-    <p>This is obfuscated email: <?php echo EmailObfuscator::obfuscate('kontakt@kminek.pl'); ?></p>
-    <pre><?php echo htmlentities(EmailObfuscator::obfuscate('kontakt@kminek.pl')); ?></pre>
+    <?php
+    $email1 = EmailObfuscator::obfuscate('contact@sample.com');
+    ?>
+    <p>This is obfuscated email: <?php echo $email1; ?></p>
+    <pre><?php echo htmlentities($email1); ?></pre>
+    <hr>
+    <?php
+    $email2 = obfuscate_email('contact@sample.com', 'Contact us', ['class' => 'some-class', 'id' => 'some-id', 'noscript' => 'Custom noscript contents']);
+    ?>
+    <p>This is obfuscated email: <?php echo $email2; ?></p>
+    <pre><?php echo htmlentities($email2); ?></pre>
 </body>
 </html>
