@@ -48,7 +48,7 @@ class EmailObfuscator
             }
         }
         $vars = [];
-        foreach (['coded', 'key', 'link', 'text'] as $var) {
+        foreach (['coded', 'key', 'link', 'text', 'ltr'] as $var) {
             do {
                 $rnd = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 10);
             } while (in_array($rnd, array_values($vars)));
@@ -75,11 +75,11 @@ class EmailObfuscator
     var {$vars['link']} = '';
     for (var i=0; i < {$vars['coded']}.length; i++) {
         if ({$vars['key']}.indexOf({$vars['coded']}.charAt(i)) == -1) {
-            var ltr = {$vars['coded']}.charAt(i);
-            {$vars['link']} += (ltr);
+            var {$vars['ltr']} = {$vars['coded']}.charAt(i);
+            {$vars['link']} += ({$vars['ltr']});
         } else {
-            var ltr = ({$vars['key']}.indexOf({$vars['coded']}.charAt(i)) - {$vars['coded']}.length + {$vars['key']}.length) % {$vars['key']}.length;
-            {$vars['link']} += ({$vars['key']}.charAt(ltr));
+            var {$vars['ltr']} = ({$vars['key']}.indexOf({$vars['coded']}.charAt(i)) - {$vars['coded']}.length + {$vars['key']}.length) % {$vars['key']}.length;
+            {$vars['link']} += ({$vars['key']}.charAt({$vars['ltr']}));
         }
     }
     {$text};
