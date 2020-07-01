@@ -23,7 +23,7 @@ class EmailObfuscator
         $options = array_merge($defaults, $options);
         $email = strtolower($email);
         $coded = '';
-        $unmixedkey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@';
+        $unmixedkey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@-';
         $inprogresskey = $unmixedkey;
         $mixedkey = '';
         $unshuffled = strlen($unmixedkey);
