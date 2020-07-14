@@ -19,11 +19,12 @@ class EmailObfuscator
     {
         $defaults = [
             'noscript' => 'Enable JavaScript to see this email address',
+            'mailto' => true,
         ];
         $options = array_merge($defaults, $options);
         $email = strtolower($email);
         $coded = '';
-        $unmixedkey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@-';
+        $unmixedkey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@-_+%';
         $inprogresskey = $unmixedkey;
         $mixedkey = '';
         $unshuffled = strlen($unmixedkey);
@@ -62,6 +63,7 @@ class EmailObfuscator
             }
             $attrs .= " {$k}=\"{$v}\"";
         }
+        $mailto = $options['mailto'] ? 'true' : 'false';
         $javascript = <<<JAVASCRIPT
 <script type="text/javascript" language="javascript">
 <!--
@@ -83,7 +85,11 @@ class EmailObfuscator
         }
     }
     {$text};
-    document.write('<a href="mailto:' + {$vars['link']} + '"{$attrs}>' + {$vars['text']} + '</a>');
+    var mailto = {$mailto};
+    var start = mailto ? '<a href="mailto:' + {$vars['link']} + '"{$attrs}>' : '';
+    var text = {$vars['text']};
+    var end = mailto ? '</a>' : '';
+    document.write(start + text + end);
 })();
 //-->
 </script><noscript>{$options['noscript']}</noscript>
