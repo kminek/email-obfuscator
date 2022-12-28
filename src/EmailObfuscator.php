@@ -40,7 +40,7 @@ class EmailObfuscator
         $cipher = $mixedkey;
         $shift = strlen($email);
         for ($j = 0; $j < strlen($email); $j++) {
-            if (strpos($cipher, $email{$j}) == -1) {
+            if (strpos($cipher, $email[$j]) == -1) {
                 $chr = $email[$j];
                 $coded .= $email[$j];
             } else {
